@@ -1,0 +1,73 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: flask-hoge
+  name: flask-hoge
+spec:
+  type: NodePort
+  selector:
+    app: flask-hoge
+  ports:
+    - port: 80
+      targetPort: 5000
+      protocol: TCP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-hoge
+  labels:
+    app: flask-hoge
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-hoge
+  template:
+    metadata:
+      labels:
+        app: flask-hoge
+    spec:
+      containers:
+        - image: python:3.9.17-slim-bullseye
+          name: flask-hoge
+          tty: true
+          command:
+            - sh
+            - -c
+            - |
+              apt update \
+              && apt upgrade -y \
+              && apt install -y curl \
+              && echo 'install nvim' \
+              && curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage \
+              && chmod u+x nvim.appimage \
+              && ./nvim.appimage --appimage-extract \
+              && ./squashfs-root/AppRun --version \
+              && ln -s /squashfs-root/AppRun /usr/bin/nvim \
+              && echo 'complete install nvim' \
+              && useradd -mU flask -s /bin/bash \
+              && echo 'flask ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
+              && cd /home/flask/ \
+              && chown flask:flask -R /home/flask/ \
+              && chown flask:flask -R /usr/src/ \
+              && python3 -m venv .venv \
+              && . .venv/bin/activate \
+              && pip install --upgrade pip \
+              && pip install Flask mysql-connector-python \
+              && while true; do sleep 1; done
+          ports:
+            - containerPort: 80
+              name: flask-hoge
+          volumeMounts:
+            - name: flask-local-storage-hoge
+              mountPath: /usr/src
+      imagePullSecrets:
+        - name: regcred
+      volumes:
+        - name: flask-local-storage-hoge
+          persistentVolumeClaim:
+            claimName: flask-pvc-hoge
+---
+

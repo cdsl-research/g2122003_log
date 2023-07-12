@@ -1,0 +1,28 @@
+piVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: flask-pvc-hoge
+  labels:
+    app: flask-hoge
+    tier: flask-hoge
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: flask-pv-hoge
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+  hostPath:
+    path: /tmp/data/flask-hoge

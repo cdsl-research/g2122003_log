@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc-hoge
+  labels:
+    app: flask-hoge
+    tier: mysql-hoge
+spec:
+  storageClassName: sc-db-hoge
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pv-hoge
+  labels:
+    type: local
+spec:
+  storageClassName: sc-db-hoge
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+  hostPath:
+    path: /tmp/data/mysql-hoge
+
