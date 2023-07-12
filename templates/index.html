@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>コメント投稿</title>
+    <script>
+    function stampComment(commentId) {
+        fetch('/stamp/' + commentId, { method: 'POST' }) // POSTメソッドを使用するように修正
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // スタンプが成功した場合の処理
+                    // ページをリロードするなど、コメントの表示を更新する必要がある場合は行ってください
+                    location.reload();
+                } else {
+                    // スタンプが失敗した場合の処理
+                    console.log(data.error);
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+    </script>
+</head>
+<body>
+    <h1>コメント投稿</h1>
+
+    <form action="/comment" method="POST">
+        <textarea name="comment" rows="4" cols="50"></textarea><br>
+        <input type="submit" value="コメント投稿">
+    </form>
+
+    <h2>コメント一覧</h2>
+    {% for comment in comments %}
+    <li>
+        {{ comment[1] }}
+        {% if comment[2] == 1 %}
+            <span>スタンプ済み</span>
+        {% else %}
+            <button onclick="stampComment({{ comment[0] }})">スタンプする</button>
+        {% endif %}
+    </li>
+    {% endfor %}
+</body>
+</html>
