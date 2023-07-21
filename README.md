@@ -10,5 +10,5 @@ kubectlが使用できる環境で実行します．
 kubectl apply -f ./yaml/*.yaml
 ```
 
-MySQLとFlaskが起動します．
+MySQLとFlaskサーバーが起動します．
 
