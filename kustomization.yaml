@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+configMapGenerator:
+- name: flask-app
+  files: 
+  - src/app.py
+- name: flask-index
+  files: 
+  - src/templates/index.html
+resources:
+- ./yaml/flask.yaml
+- ./yaml/mysql_pv.yaml
+- ./yaml/mysql.yaml

@@ -50,24 +50,36 @@ spec:
               && useradd -mU flask -s /bin/bash \
               && echo 'flask ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
               && cd /home/flask/ \
-              && chown flask:flask -R /home/flask/ \
-              && chown flask:flask -R /usr/src/ \
               && python3 -m venv .venv \
               && . .venv/bin/activate \
+              && echo "active venv!" \
               && pip install --upgrade pip \
               && pip install Flask mysql-connector-python \
-              && while true; do sleep 1; done
+              && echo "complete pip install" \
+              && cp /usr/src/app.py ./ \
+              && mkdir /home/flask/templates \
+              && cp /usr/src/index.html ./templates \
+              && ls \
+              && echo $FLASK_APP \
+              && flask run --host=0.0.0.0
           ports:
             - containerPort: 80
               name: flask-hoge
           volumeMounts:
-            - name: flask-local-storage-hoge
-              mountPath: /usr/src
+            - name: flask-data
+              mountPath: /home/flask
+            - name: flask-app
+              mountPath: /usr/src/
       imagePullSecrets:
         - name: regcred
       volumes:
-        - name: flask-local-storage-hoge
-          persistentVolumeClaim:
-            claimName: flask-pvc-hoge
+        - name: flask-data
+          emptyDir: {}
+        - name: flask-app
+          projected:
+            sources:
+              - configMap:
+                  name: flask-app
+              - configMap:
+                  name: flask-index
 ---
-

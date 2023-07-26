@@ -1,5 +1,5 @@
 # g2122003_log
-ver0.1
+ver0.1.1
 
 これはPythonで作成したWeb小説のレビューサイトです．
 Kubernetesで起動できます．
@@ -7,7 +7,7 @@ Kubernetesで起動できます．
 # 使い方
 kubectlが使用できる環境で実行します．
 ```
-kubectl apply -f ./yaml/*.yaml
+kubectl apply -k ./
 ```
 
 MySQLとFlaskサーバーが起動します．
