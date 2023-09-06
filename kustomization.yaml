@@ -7,7 +7,12 @@ configMapGenerator:
 - name: flask-index
   files: 
   - src/templates/index.html
+- name: nginx-conf
+  files:
+  - src/nginx.conf
 resources:
 - ./yaml/flask.yaml
 - ./yaml/mysql_pv.yaml
 - ./yaml/mysql.yaml
+- ./yaml/nginx-deployment.yaml
+- ./yaml/nginx-service.yaml

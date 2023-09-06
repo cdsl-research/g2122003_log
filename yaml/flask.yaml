@@ -5,13 +5,12 @@ metadata:
     app: flask-hoge
   name: flask-hoge
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: flask-hoge
   ports:
     - port: 8080
       targetPort: 5000
-      nodePort: 30515
       protocol: TCP
 ---
 apiVersion: apps/v1

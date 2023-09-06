@@ -1,5 +1,5 @@
 # g2122003_log
-ver0.1.4
+ver0.2.0
 
 これはPythonで作成したWeb小説のレビューサイトです．
 Kubernetesで起動できます．

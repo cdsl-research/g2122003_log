@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nginx-app-proxy
+    name: nginx-proxy
+  name: nginx-proxy-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-app-proxy
+      name: nginx-proxy
+  template:
+    metadata:
+      labels:
+        app: nginx-app-proxy
+        name: nginx-proxy
+    spec:
+      containers:
+      - name: nginx-proxy
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+          name: nginx-port
+          protocol: TCP
+        volumeMounts:
+        - name: nginx-conf-file
+          mountPath: /etc/nginx/
+          readOnly: true
+        - name: cache-data
+          mountPath: /var/cache/nginx
+      volumes:
+        - name: nginx-conf-file
+          configMap:
+            name: nginx-conf
+        - name: cache-data
+          emptyDir: {}
+      imagePullSecrets:
+        - name: regcred
