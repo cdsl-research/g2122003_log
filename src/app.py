@@ -1,24 +1,32 @@
 from flask import Flask, render_template, request, redirect, jsonify
 import mysql.connector
+import sys
 
 app = Flask(__name__)
 
-# MySQL接続の設定
-db = mysql.connector.connect(
-    host='mysql-hoge',
-    user='user',
-    password='pass',
-    database='flask_db'
-)
-
-cursor = db.cursor()
-cursor.execute('CREATE TABLE IF NOT EXISTS comments (id INT AUTO_INCREMENT PRIMARY KEY, comment TEXT)')
-
-cursor.execute("SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'comments' AND column_name = 'stamp'")
-result = cursor.fetchone()
-if result[0] == 0:
-    # カラムが存在しない場合の処理
-    cursor.execute('ALTER TABLE comments ADD COLUMN stamp INT DEFAULT 0')
+try:
+    # MySQL接続の設定
+    db = mysql.connector.connect(
+        host='mysql-hoge',
+        user='user',
+        password='pass',
+        database='flask_db'
+    )
+    
+    #アクセスがない際にDBとの接続が切れるので対策した
+    db.ping(reconnect=True)
+    
+    cursor = db.cursor()
+    cursor.execute('CREATE TABLE IF NOT EXISTS comments (id INT AUTO_INCREMENT PRIMARY KEY, comment TEXT)')
+    
+    cursor.execute("SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'comments' AND column_name = 'stamp'")
+    result = cursor.fetchone()
+    if result[0] == 0:
+        # カラムが存在しない場合の処理
+        cursor.execute('ALTER TABLE comments ADD COLUMN stamp INT DEFAULT 0')
+except mysql.connector.errors.ProgrammingError as e:
+    print(e)
+    sys.exit(1)
 
 @app.route('/')
 def index():
@@ -46,4 +54,4 @@ def stamp_comment(comment_id):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=80)
+    app.run(debug=True, host='0.0.0.0', port=8080)
