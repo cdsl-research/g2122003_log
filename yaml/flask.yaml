@@ -9,8 +9,9 @@ spec:
   selector:
     app: flask-hoge
   ports:
-    - port: 80
+    - port: 8080
       targetPort: 5000
+      nodePort: 30515
       protocol: TCP
 ---
 apiVersion: apps/v1
@@ -56,14 +57,14 @@ spec:
               && pip install --upgrade pip \
               && pip install Flask mysql-connector-python \
               && echo "complete pip install" \
-              && cp /usr/src/app.py ./ \
-              && mkdir /home/flask/templates \
-              && cp /usr/src/index.html ./templates \
+              && cp /usr/src/app.py /home/flask/app.py \
+              && mkdir -p /home/flask/templates \
+              && cp /usr/src/index.html /home/flask/templates/index.html \
               && ls \
               && echo $FLASK_APP \
               && flask run --host=0.0.0.0
           ports:
-            - containerPort: 80
+            - containerPort: 8080
               name: flask-hoge
           volumeMounts:
             - name: flask-data
