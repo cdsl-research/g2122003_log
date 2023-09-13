@@ -4,14 +4,14 @@ metadata:
   labels:
     app: nginx-app-proxy
     name: nginx-proxy
-  name: nginx-proxy-servic
+  name: nginx-proxy-service
 spec:
   selector:
     app: nginx-app-proxy
     name: nginx-proxy
-  type: LoadBalancer
+  type: NodePort
   ports:
-  - name: nginx-prot
-    port: 31333
+  - port: 31333
+    nodePort: 30515
     protocol: TCP
     targetPort: nginx-port

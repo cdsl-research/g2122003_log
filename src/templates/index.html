@@ -23,14 +23,9 @@
     </script>
 </head>
 <body>
-    <h1>コメント投稿</h1>
-
-    <form action="/comment" method="POST">
-        <textarea name="comment" rows="4" cols="50"></textarea><br>
-        <input type="submit" value="コメント投稿">
-    </form>
-
-    <h2>コメント一覧</h2>
+    <h1>書籍</h1>
+    <a href="/register">書籍登録はこちら</a>
+    <h1>レビュー一覧</h1>
     {% for comment in comments %}
     <li>
         {{ comment[1] }}
@@ -41,5 +36,11 @@
         {% endif %}
     </li>
     {% endfor %}
+
+    <h2>レビュー投稿</h2>
+    <form action="/comment" method="POST">
+        <textarea name="comment" rows="4" cols="50"></textarea><br>
+        <input type="submit" value="レビュー投稿">
+    </form>
 </body>
 </html>

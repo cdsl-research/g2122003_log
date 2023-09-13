@@ -7,6 +7,10 @@ configMapGenerator:
 - name: flask-index
   files: 
   - src/templates/index.html
+  - src/templates/register.html
+  - src/templates/comp-of-registration.html
+  - src/templates/confirm.html
+  - src/templates/input.html
 - name: nginx-conf
   files:
   - src/nginx.conf

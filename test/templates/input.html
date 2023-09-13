@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>データ入力</title>
+</head>
+<body>
+    <h1>データ入力</h1>
+    <form method="POST">
+        <label for="title">タイトル:</label>
+        <input type="text" name="title" required><br>
+
+        <label for="author">著者:</label>
+        <input type="text" name="author" required><br>
+
+        <!-- 他のデータフィールドを追加 -->
+
+        <input type="submit" value="データを入力">
+    </form>
+    <form method="POST">
+        <label for="isbn">ISBN-13(整数のみ):</label>
+        <input type="text" name="isbn" id="isbn" pattern="[0-9]{13}" required></br>
+
+	<label for="checkboxId">この書籍が第1巻であればチェックをお願いします！</label>
+	<input type="checkbox" id="checkboxId" name="checkboxName"></br>
+
+        <input type="submit" value="書籍登録">
+    </form>
+
+</body>
+</html>
+

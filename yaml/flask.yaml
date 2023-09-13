@@ -54,11 +54,11 @@ spec:
               && . .venv/bin/activate \
               && echo "active venv!" \
               && pip install --upgrade pip \
-              && pip install Flask mysql-connector-python \
+              && pip install Flask mysql-connector-python requests\
               && echo "complete pip install" \
               && cp /usr/src/app.py /home/flask/app.py \
               && mkdir -p /home/flask/templates \
-              && cp /usr/src/index.html /home/flask/templates/index.html \
+              && cp /usr/src/* /home/flask/templates/ \
               && ls \
               && echo $FLASK_APP \
               && flask run --host=0.0.0.0
