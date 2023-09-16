@@ -4,15 +4,40 @@
     <title>書籍登録</title>
 </head>
 <body>
+    <h1>書籍登録</h1>
+    <p>書籍登録は1冊ずつ行ってください．</p>
     <form action="/register/book" method="POST">
-        <label for="isbn">ISBN-13:</label>
-        <input type="text" name="isbn" id="isbn" pattern="[0-9]{13}" required></br>
+        <p>
+            <label for="isbn">登録したい書籍のISBN-13(数字のみ):</label>
+            <input type="text" name="isbn" id="isbn" pattern="[0-9]{13}" required>
+        </p>
 
-	<label for="checkboxId">この書籍が第1巻であればチェックをお願いします！</label>
-	<input type="checkbox" id="checkboxId" name="checkboxName" value="checkboxValue"></br>
+        <p>
+            <input type="checkbox" id="checkboxId" name="checkboxName" value="on">
+            <label for="checkboxId">第1巻の登録であればチェックをお願いします！</label>
+        </p>
+
+        <p>
+            <label for="sequel_isbn">第1巻のISBN-13(数字のみ):</label>
+            <input type="text" name="volume1_isbn" id="volume1_isbn" pattern="[0-9]{13}">
+        </p>
 
         <input type="submit" value="書籍登録">
     </form>
+
+    <script>
+        const checkbox = document.getElementById('checkboxId');
+        const isbnInput = document.getElementById('isbn');
+        const sequelIsbnInput = document.getElementById('volume1_isbn');
+
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                sequelIsbnInput.disabled = true;
+            } else {
+                sequelIsbnInput.disabled = false;
+            }
+        });
+    </script>
 </body>
 </html>
- 
+

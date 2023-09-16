@@ -6,7 +6,7 @@
 <body>
     <h1>登録内容確認</h1>
     <p>以下の登録内容を確認してください:</p>
-    <img src="{{ data.image }}"></br>
+    <img src="{{ data.image }}"><br>
     <ul>
         <li><strong>タイトル:</strong> {{ data.title }}</li>
         <li><strong>著者:</strong> {{ data.authors }}</li>
@@ -14,6 +14,9 @@
         <li><strong>出版日:</strong> {{ data.published_date }}</li>
         <li><strong>あらすじ:</strong> {{ data.description }}</li>
         <li><strong>1巻ですか？:</strong> {{ data.check }}</li>
+        {% if not data.is_check %}
+            <li><strong>第1巻のタイトル:</strong> {{ data.volume1_title }}</li>
+        {% endif %}
         <!-- 他のデータフィールドを追加 -->
     </ul>
     <form method="POST">

@@ -11,9 +11,13 @@ configMapGenerator:
   - src/templates/comp-of-registration.html
   - src/templates/confirm.html
   - src/templates/input.html
+  - src/templates/novel_detail.html
 - name: nginx-conf
   files:
   - src/nginx.conf
+- name: my-conf
+  files:
+  - src/my.cnf
 resources:
 - ./yaml/flask.yaml
 - ./yaml/mysql_pv.yaml

@@ -24,18 +24,6 @@ try:
     
     cursor.execute('CREATE TABLE IF NOT EXISTS books (`isbn` BIGINT PRIMARY KEY, `title` TEXT, `author` TEXT, `image` TEXT, `check` BOOLEAN, `publisher_date` TEXT, `description` TEXT, `post_number` INT)')
     cursor.execute('CREATE TABLE IF NOT EXISTS sequels (id INT AUTO_INCREMENT PRIMARY KEY, main_novel_id BIGINT, sequel_novel_id BIGINT)')
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS reviews (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            novel_id BIGINT,
-            user_id INT,
-            comment TEXT,
-            post_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            review_type ENUM("book", "web", "both"),
-            spoiler_alert BOOLEAN
-        )
-    ''')
-
 
 
     cursor.execute("SELECT COUNT(*) FROM information_schema.columns WHERE table_name = 'comments' AND column_name = 'stamp'")
@@ -59,8 +47,7 @@ def index():
 
         # コメントをデータベースから取得して表示する
         cursor = db.cursor()
-        cursor.execute('SELECT title FROM books')
-        #cursor.execute('SELECT title FROM books WHERE `check` LIKE "on"')
+        cursor.execute('SELECT title FROM books WHERE `check` LIKE "on"')
         #cursor.execute('SELECT * FROM comments')
         comments = cursor.fetchall()
     except mysql.connector.errors.ProgrammingError as e:
@@ -211,25 +198,11 @@ def novel_detail(novel_id):
     #    cursor.execute('SELECT image FROM books  WHERE `main_novel_id` = %s', (novel,))
     #    image_list.append(cursor.fethone())
 
-    cursor.execute('SELECT * FROM books WHERE `isbn` = %s', (novel_id,))
+    cursor.execute('SELECT * FROM books WHERE `post_number` = %s', (novel_id,))
     novel = cursor.fetchone()
 
     # 小説の詳細情報をHTMLテンプレートに渡して表示します
-    return render_template('novel_detail.html', novel=novel)
-
-@app.route('/novel/id<int:novel_id>/review', methods=['POST'])
-def add_review(novel_id):
-    # フォームから新しい情報を受け取る
-    comment = request.form.get('comment')
-    user_id = 1  # 仮のユーザーID、必要に応じて変更
-    review_type = request.form.get('review_type')
-    spoiler_alert = bool(request.form.get('spoiler_alert'))
-
-    # レビューをデータベースに保存する
-    cursor = db.cursor()
-    cursor.execute('INSERT INTO reviews (novel_id, user_id, comment, review_type, spoiler_alert) VALUES (%s, %s, %s, %s, %s)', (novel_id, user_id, comment, review_type, spoiler_alert))
-    db.commit()
-    return redirect(f'/novel/id{novel_id}')
+    return render_template('novel_detail.html', novel=novel, novel_list=novel_list)
 
 
 if __name__ == '__main__':

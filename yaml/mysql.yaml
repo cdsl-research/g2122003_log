@@ -32,24 +32,29 @@ spec:
         - image: mysql:8.0.33-oracle
           name: mysql-hoge
           env:
-          - name: MYSQL_ROOT_PASSWORD
-            value: password
-          - name: MYSQL_DATABASE
-            value: flask_db
-          - name: MYSQL_USER
-            value: user
-          - name: MYSQL_PASSWORD
-            value: pass
+            - name: MYSQL_ROOT_PASSWORD
+              value: password
+            - name: MYSQL_DATABASE
+              value: flask_db
+            - name: MYSQL_USER
+              value: user
+            - name: MYSQL_PASSWORD
+              value: pass
           ports:
             - containerPort: 3306
               name: mysql-hoge
           volumeMounts:
             - name: mysql-local-storage-hoge
               mountPath: /var/lib/mysql
+            - name: mysql-conf
+              mountPath: /etc/mysql/conf.d
       imagePullSecrets:
-      - name: regcred
+        - name: regcred
       volumes:
         - name: mysql-local-storage-hoge
           persistentVolumeClaim:
             claimName: mysql-pvc-hoge
+        - name: mysql-conf
+          configMap:
+            name: my-conf
 

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ novel.title }}</title>
+</head>
+<body>
+    <h1>{{ novel.title }}</h1>
+    <img src="{{ novel.image }}">
+    <p>著者: {{ novel.author }}</p>
+    <p>出版日: {{ novel.publisher_date }}</p>
+    <p>あらすじ: {{ novel.description }}</p>
+    <!-- レビュー投稿フォーム -->
+    <!-- レビュー一覧 -->
+    <h2>レビュー一覧</h2>
+    <ul>
+        {% for review in reviews %}
+            <li>{{ review.comment }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>レビューを投稿する</h2>
+    <form action="/novel/id{{ novel.id }}/review" method="POST">
+        <textarea name="comment" rows="4" cols="50" placeholder="レビューを投稿してください" required></textarea>
+        <br>
+
+        <label for="reviewType">レビューの種類:</label>
+        <select name="review_type" id="reviewType" required>
+            <option value="book">書籍</option>
+            <option value="web">Web版</option>
+            <option value="both">両方</option>
+        </select>
+        <br>
+
+        <label for="spoilerAlert">ネタバレ:</label>
+        <input type="checkbox" name="spoiler_alert" id="spoilerAlert">
+        <br>
+
+        <input type="submit" value="投稿">
+    </form>
+
+
+</body>
+</html>
+
