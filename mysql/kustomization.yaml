@@ -7,3 +7,4 @@ configMapGenerator:
 resources:
 - ./yaml/mysql_pv.yaml
 - ./yaml/mysql.yaml
+- ./yaml/create_namespace.yaml

@@ -3,6 +3,7 @@ kind: Service
 metadata:
   labels:
     app: flask-hoge
+  namespace: novel-back-end
   name: flask-hoge
 spec:
   type: ClusterIP
@@ -19,6 +20,7 @@ metadata:
   name: flask-hoge
   labels:
     app: flask-hoge
+  namespace: novel-back-end
 spec:
   replicas: 1
   selector:

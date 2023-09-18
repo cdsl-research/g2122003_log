@@ -5,6 +5,7 @@ metadata:
   labels:
     app: flask-hoge
     tier: mysql-hoge
+  namespace: novel-back-end
 spec:
   storageClassName: sc-db-hoge
   accessModes:
