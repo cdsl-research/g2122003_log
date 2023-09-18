@@ -82,6 +82,4 @@ spec:
             sources:
               - configMap:
                   name: flask-app
-              - configMap:
-                  name: flask-index
 ---
