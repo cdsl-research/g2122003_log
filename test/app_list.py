@@ -4,6 +4,7 @@ import requests
 import mysql.connector
 import sys
 import json
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # セッションのセキュリティキー
@@ -27,7 +28,7 @@ try:
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS reviews (
             id INT AUTO_INCREMENT PRIMARY KEY,
-            novel_id BIGINT,
+            isbn BIGINT,
             user_id INT,
             comment TEXT,
             post_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -60,6 +61,31 @@ def index():
         print("/ :", e)
         sys.exit(1)
     return jsonify(books_list)
+
+
+@app.route('/novel/id<int:novel_id>')
+def novel_detail(novel_id):
+    # MySQLから小説の詳細情報を取得するクエリを実行します
+    cursor = db.cursor(dictionary=True)
+    cursor.execute('SELECT * FROM sequels  WHERE `main_novel_id` = %s', (novel_id,))
+    novel_list = cursor.fetchall()
+    #image_list = []
+    #for novel in novel_list:
+    #    cursor.execute('SELECT image FROM books  WHERE `main_novel_id` = %s', (novel,))
+    #    image_list.append(cursor.fethone())
+
+    cursor.execute('SELECT * FROM books WHERE `isbn` = %s AND `check` = 1', (novel_id,))
+    novel = cursor.fetchone()
+    print(novel)
+
+    review_page = {'novel': novel}
+    cursor.execute('SELECT * FROM reviews WHERE `isbn` = %s', (novel_id,))
+    reviews = cursor.fetchall()
+    review_page.update({'review': reviews})
+ 
+    return jsonify(review_page)
+
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=8080)
