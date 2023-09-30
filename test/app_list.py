@@ -19,6 +19,7 @@ try:
         database='flask_db',
         charset  = 'utf8mb4',
         port = 31953,
+        auth_plugin='mysql_native_password', # mysql.connector.errors.NotSupportedError: Authentication plugin 'caching_sha2_password' is not supported 防止
     )
     
     
