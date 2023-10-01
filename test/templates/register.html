@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>書籍登録</title>
+</head>
+<body>
+    <h1>書籍登録</h1>
+    <form method="POST" action="/register">
+        <label for="isbn">ISBN:</label>
+        <input type="text" name="isbn" id="isbn" required>
+        <br>
+
+        <label for="checkboxName">チェックボックス:</label>
+        <input type="checkbox" name="checkboxName" id="checkboxName">
+        <br>
+
+        <label for="volume1_isbn">第1巻のISBN:</label>
+        <input type="text" name="volume1_isbn" id="volume1_isbn">
+        <br>
+
+        <input type="submit" value="登録">
+    </form>
+</body>
+</html>
