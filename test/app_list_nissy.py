@@ -86,6 +86,7 @@ def novel_detail(novel_id):
 
     return jsonify(review_page)
 
+"""
 # 書籍を登録している.
 @app.route('/register', methods=['GET', 'POST'])    # 登録ページに確認の内容を返してあげる
 def register():
@@ -140,15 +141,17 @@ def register():
             'volume1_isbn': volume1_isbn,
             # 他のデータフィールドも同様に取得
         }
-        return redirect('/confirm')  # 確認画面にリダイレクト
+        # return redirect('/confirm')  # 確認画面にリダイレクト
         check = jsonify(session['data'])
         print(check)
         return check
     else:
         print("not post!")
 
-    return render_template('register.html') # ここをjsonの形式直した状態で送り返してあげる
+    # return render_template('register.html') # ここをjsonの形式直した状態で送り返してあげる
+"""
 
+"""
 # registerのときに, 1巻のタイトル情報取得.
 def fetch_volume1_title(volume1_isbn): # GoogleAPI -> DBに聞き返す.
     url = "https://www.googleapis.com/books/v1/volumes?"
@@ -162,17 +165,55 @@ def fetch_volume1_title(volume1_isbn): # GoogleAPI -> DBに聞き返す.
         thumbnail = volume_info.get("imageLinks", {}).get("thumbnail", "")
         return title
     return "情報なし"  # 第1巻が見つからない場合のデフォルト値
+"""
+
+# registerのときに, 1巻のタイトル情報取得.
+def fetch_volume1_title(volume1_isbn):
+    cursor = db.cursor()
+
+    # ISBNを使ってDBからタイトル情報を取得
+    query = "SELECT title FROM your_table WHERE isbn = %s"
+    cursor.execute(query, (volume1_isbn,))
+    result = cursor.fetchone()
+
+    # タイトル情報が存在する場合、タイトルを取得
+    if result:
+        title = result[0]
+        conn.close()
+        return title
+    else:
+        conn.close()
+        return "情報なし"  # 第1巻が見つからない場合のデフォルト値
 
 
 # ここで最終的な登録を行っている.
 @app.route('/confirm', methods=['GET', 'POST'])
 def confirm_data():
     data = session.get('data')  # セッションからデータを取得
+
+    # 確認用
+    data = {str(9784575518610), 1, "転生したらスライムだった件", "伏瀬"}
+    
+    # (確認用)
+    # ユーザーからデータを受け取り、セッションに保存
+        # session['data'] = {
+        #     'isbn': str(isbn),
+        #     'check': check,
+        #     'is_check': is_check,
+        #     'title': title,
+        #     'authors': ",".join(authors),
+        #     'published_date': published_date,
+        #     'description': description,
+        #     'image': thumbnail,
+        #     'volume1_title': volume1_title,  # 第1巻のタイトルをセッションに追加
+        #     'volume1_isbn': volume1_isbn,
+        #     # 他のデータフィールドも同様に取得
+        # }
+
     if not data:
         return redirect('/register')  # データがない場合は入力画面にリダイレクト
 
-
-    if request.method == 'POST':
+    if request.method == 'GET':  # 元POST
         # ユーザーが確認画面でデータを承認した場合、データをデータベースに保存
         # ここでデータベースへの保存処理を実行
         # 保存が成功した場合、セッションからデータを削除
@@ -200,16 +241,27 @@ def confirm_data():
         print("register MySQL")
         cursor.execute('INSERT INTO books (`isbn`, `title`, `author`, `image`, `check`, `publisher_date`, `description`, `post_number`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)', (data['isbn'], data['title'], data['authors'], data['image'], check, data['published_date'], data['description'], post_number))
         db.commit()
-        
+
         session.pop('data', None)
-        return redirect('/comp')  # 保存が成功したらホームページにリダイレクト
 
-    return render_template('confirm.html', data=data) # data=data がreturnの値(jsonfy(data)) -> 確認取れているかどうか
+        # データをJSON形式に変換して返す
+        response_data = {
+            'message': 'データが正常に保存されました。',
+            'data': data
+        }
 
+        return jsonify(response_data)
+
+        # return redirect('/comp')  # 保存が成功したらホームページにリダイレクト
+
+    # return render_template('confirm.html', data=data) # data=data がreturnの値(jsonfy(data)) -> 確認取れているかどうか
+
+"""
 # 登録完了画面どうするか
 @app.route('/comp', methods=['GET'])
 def comp_data():
     return render_template('comp-of-registration.html')
+"""
 
 # review投稿させている.
 @app.route('/novel/id<int:novel_id>/review', methods=['POST'])
@@ -224,7 +276,7 @@ def add_review(novel_id):
     cursor = db.cursor()
     cursor.execute('INSERT INTO reviews (novel_id, user_id, comment, review_type, spoiler_alert) VALUES (%s, %s, %s, %s, %s)', (novel_id, user_id, comment, review_type, spoiler_alert))
     db.commit()
-    return redirect(f'/novel/id{novel_id}') # React側でリダイレクト行ってもらう. (投稿したよという確認メッセージ返すことぐらいあってもいいかも.(なくてもいい))
+    # return redirect(f'/novel/id{novel_id}') # React側でリダイレクト行ってもらう. (投稿したよという確認メッセージ返すことぐらいあってもいいかも.(なくてもいい))
 
 
 if __name__ == '__main__':
